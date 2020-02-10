@@ -75,17 +75,21 @@ const startApp = async () => {
             message: 'Type your watermark text:',
         }]);
         options.watermarkText = text.value;
+       
+        try {
+            if (fs.existsSync('./img/' + options.inputImage)) {
 
-        if (fs.existsSync('./img/' + options.inputImage)) {
+                addTextWatermarkToImage('./img/' + options.inputImage, './img/' + prepareOutputFilename(options.inputImage), options.watermarkText);
 
-            addTextWatermarkToImage('./img/' + options.inputImage, './img/' + prepareOutputFilename(options.inputImage), options.watermarkText);
+                console.log('Success! Check file!');
+                startApp();
 
-            console.log('Success! Check file!');
-            startApp();
-
-        } else {
-            console.log('Something went wrong... Try again');
-            startApp();
+            } else {
+                console.log('Something went wrong... Try again');
+                startApp();
+            }
+        } catch (error) {
+            console.log(error);
         }
     } else {
         const image = await inquirer.prompt([{
@@ -96,18 +100,22 @@ const startApp = async () => {
         }]);
         options.watermarkImage = image.filename;
 
-        if (fs.existsSync('./img/' + options.inputImage) && fs.existsSync('./img/' + options.watermarkImage)) {
+        try {
+            if (fs.existsSync('./img/' + options.inputImage) && fs.existsSync('./img/' + options.watermarkImage)) {
 
-            addImageWatermarkToImage('./img/' + options.inputImage, './img/' + prepareOutputFilename(options.inputImage), './img/' + options.watermarkImage);
+                addImageWatermarkToImage('./img/' + options.inputImage, './img/' + prepareOutputFilename(options.inputImage), './img/' + options.watermarkImage);
 
-            console.log('Success! Check file!');
-            startApp();
+                console.log('Success! Check file!');
+                startApp();
 
-        } else {
-            console.log('Something went wrong... Try again');
-            startApp();
+            } else {
+                console.log('Something went wrong... Try again');
+                startApp();
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 };
 
-startApp();
+    startApp();
